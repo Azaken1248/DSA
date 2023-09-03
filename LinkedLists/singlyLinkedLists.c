@@ -10,8 +10,8 @@ struct node
 int main()
 {
     struct node *head, *newNode, *temp;
-
     head = NULL;
+
     int choice = 1;
 
     while (choice)
@@ -28,22 +28,22 @@ int main()
         else
         {
             temp->next = newNode;
-            temp = newNode;
+            temp = temp->next;
         }
 
-        printf("Do You Want To Continue[0/1] : ");
+        printf("Do You Want To Continue [0/1] : ");
         scanf("%d", &choice);
     }
 
     temp = head;
 
-    printf("[");
+    printf("[ ");
     while (temp != NULL)
     {
-        printf("(%d : %d), ", temp->data, temp->next);
+        printf("(0x%d : %d) ", temp->next, temp->data);
         temp = temp->next;
     }
-    printf("]");
+    printf("]\n");
 
     return 0;
 }
