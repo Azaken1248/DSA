@@ -7,202 +7,185 @@ struct node
     struct node *next;
 };
 
-void display(struct node *temp, struct node *head)
+struct node *createnode(int data, struct node *next)
 {
-    temp = head;
-    printf("[ ");
-    while (temp != NULL)
-    {
-        printf("(0x%d : %d) ", temp->next, temp->data);
-        temp = temp->next;
-    }
-    printf("]\n");
-}
+    struct node *newnode;
+    newnode = (struct node *)malloc(sizeof(struct node));
+    newnode->data = data;
+    newnode->next = next;
 
+    return newnode;
+}
 int main()
 {
-    struct node *head, *newNode, *temp;
-    head = NULL;
+    struct node *head = NULL;
 
-    int choice = 1;
-
-    while (choice)
+    int choice = 0;
+    do
     {
-        newNode = (struct node *)malloc(sizeof(struct node));
-        printf("Enter Data : ");
-        scanf("%d", &newNode->data);
-        newNode->next = NULL;
-
-        if (head == NULL)
-        {
-            head = temp = newNode;
-        }
-        else
-        {
-            temp->next = newNode;
-            temp = temp->next;
-        }
-
-        printf("Do You Want To Continue [0/1] : ");
+        printf("Choose An Operation:-\n");
+        printf("1.Insert ELement In Beginning\n2.Insert ELement In End\n3.Insert ELement At Some Position\n");
+        printf("4.Delete ELement In Beginning\n5.Delete ELement In End\n6.Delete ELement At Some Position\n");
+        printf("7.Display The List\n");
+        printf("Your choice(-1 to quit): ");
         scanf("%d", &choice);
-    }
 
-    display(temp, head);
-
-    int menuChoice, insertChoice, deleteChoice, pos, length = 0;
-
-    printf("--------------Linked List Operations--------------\n");
-    printf("1. Insert Node\n");
-    printf("2. Delete Node\n");
-    printf("3. Display Length\n");
-    printf("4. Display List\n");
-    printf("5. Reverse List\n");
-    printf("Enter Your Choice : ");
-    scanf("%d", &menuChoice);
-    printf("--------------------------------------------------\n\n");
-
-    switch (menuChoice)
-    {
-    case 1:
-        printf("------------------Insert Options------------------\n");
-        printf("1. Insert At Beginning\n");
-        printf("2. Insert At End\n");
-        printf("3. Insert At Specific Position\n");
-        printf("Enter Your Choice : ");
-        scanf("%d", &insertChoice);
-        printf("--------------------------------------------------\n\n");
-
-        switch (insertChoice)
+        if (choice == 1)
         {
-        case 1:
-            newNode = (struct node *)malloc(sizeof(struct node));
-            printf("Enter Data For New Head Node : ");
-            scanf("%d", &newNode->data);
-            newNode->next = head;
-            head = newNode;
+            int data;
+            printf("Enter Data: ");
+            scanf("%d", &data);
 
-            printf("Element inserted Successfully\n");
-            break;
-
-        case 2:
-            newNode = (struct node *)malloc(sizeof(struct node));
-            printf("Enter Data For New Tail Node : ");
-            scanf("%d", &newNode->data);
-
-            temp = head;
-            while (temp->next != NULL)
+            struct node *newnode;
+            if (head == NULL)
             {
-                temp = temp->next;
+                newnode = createnode(data, NULL);
             }
-            temp->next = newNode;
-            newNode->next = NULL;
-
-            printf("Element inserted Successfully\n");
-            break;
-        case 3:
-            newNode = (struct node *)malloc(sizeof(struct node));
-            printf("Enter New Node Data : ");
-            scanf("%d", &newNode->data);
-            printf("Enter Position To Insert : ");
+            else
+            {
+                newnode = createnode(data, head);
+            }
+            head = newnode;
+        }
+        else if (choice == 2)
+        {
+            int data;
+            struct node *newnode;
+            printf("Enter Data: ");
+            scanf("%d", &data);
+            if (head == NULL)
+            {
+                newnode = createnode(data, NULL);
+                head = newnode;
+            }
+            else
+            {
+                newnode = createnode(data, NULL);
+                struct node *temp = head;
+                while (temp->next != NULL)
+                {
+                    temp = temp->next;
+                }
+                temp->next = newnode;
+            }
+        }
+        else if (choice == 3)
+        {
+            int pos, data;
+            struct node *temp, *newnode;
+            printf("Enter Data: ");
+            scanf("%d", &data);
+            printf("Enter Postion: ");
             scanf("%d", &pos);
 
-            int count = 1;
-
-            temp = head;
-            while (temp != NULL)
+            if (head == NULL)
             {
-                count++;
-                temp = temp->next;
-            }
-
-            if (count < pos || pos < 0)
-            {
-                printf("Invalid Position\n");
+                newnode = createnode(data, NULL);
+                head = newnode;
             }
             else
             {
                 temp = head;
-                int i = 1;
-                while (i < pos)
+                for (int i = 1; i < pos - 1; i++)
                 {
-                    printf("IN");
                     temp = temp->next;
-                    i++;
                 }
-                newNode->next = temp->next;
-                temp->next = newNode;
+                newnode = createnode(data, temp->next);
+                temp->next = newnode;
             }
-
-            printf("Element inserted Successfully\n");
-            break;
-        default:
-            printf("Invalid Choice\n");
-            break;
         }
-        break;
-
-    case 2:
-        printf("------------------Delete Options------------------\n");
-        printf("1. Delete At Beginning\n");
-        printf("2. Delete At End\n");
-        printf("3. Delete At Specific Position\n");
-        printf("Enter Your Choice : ");
-        scanf("%d", &deleteChoice);
-        printf("--------------------------------------------------\n\n");
-        switch (deleteChoice)
+        else if (choice == 4)
         {
-        case 1:
-            temp = head;
-            head = head->next;
-            free(temp);
-            printf("Element Deleted Successfully\n");
-            break;
+            if (head != NULL)
+            {
+                struct node *temp = head;
+                head = temp->next;
 
-        case 2:
-            temp = head;
-            struct node *prevNode;
-            while (temp->next != NULL)
-            {
-                prevNode = temp;
-                temp = temp->next;
-                // printf("%d#\n", temp->data);
-            }
-            if (temp == head)
-            {
-                head = 0;
+                free(temp);
             }
             else
             {
-                prevNode->next = 0;
+                printf("No Element To Delete!\n");
             }
-            free(temp);
-
-            printf("Element Deleted Successfully\n");
-            break;
-
-        case 3:
-            break;
         }
-        break;
-
-    case 3:
-
-        temp = head;
-        while (temp != NULL)
+        else if (choice == 5)
         {
-            length++;
-            temp = temp->next;
+            if (head != NULL)
+            {
+                struct node *temp2;
+                struct node *temp = head;
+                while (temp->next->next != NULL)
+                {
+                    temp = temp->next;
+                }
+                temp2 = temp->next;
+                temp->next = NULL;
+                free(temp2);
+            }
+            else
+            {
+                printf("No Element To Delete!\n");
+            }
+        }
+        else if (choice == 6)
+        {
+            if (head != NULL)
+            {
+                int pos;
+                printf("Enter Position: ");
+                scanf("%d", &pos);
+
+                if (pos == 1)
+                {
+                    struct node *temp = head;
+                    head = head->next;
+                    free(temp);
+                }
+                else
+                {
+                    struct node *temp = head;
+                    for (int i = 1; i < pos - 1 && temp != NULL; i++)
+                    {
+                        temp = temp->next;
+                    }
+
+                    if (temp == NULL || temp->next == NULL)
+                    {
+                        printf("Invalid position to delete.\n");
+                    }
+                    else
+                    {
+                        struct node *temp2 = temp->next;
+                        temp->next = temp->next->next;
+                        free(temp2);
+                    }
+                }
+            }
+        }
+        else if (choice == 7)
+        {
+            if (head == NULL)
+            {
+                printf("[]\n");
+            }
+            else
+            {
+                struct node *temp = head;
+                printf("[");
+                while (temp->next != NULL)
+                {
+                    printf("%d->", temp->data);
+                    temp = temp->next;
+                }
+                printf("%d]\n", temp->data);
+            }
+        }
+        else
+        {
+            printf("Invalid Choice!\n");
         }
 
-        printf("Length : %d\n\n", length);
+    } while (choice != -1);
 
-        break;
-
-    default:
-        break;
-    }
-
-    display(temp, head);
-
-    return 0;
+    // printf("Data : %d Next: %d\n", mynode->data, mynode->next);
 }
